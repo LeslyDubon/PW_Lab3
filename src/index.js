@@ -1,6 +1,4 @@
-const express = require('express');
-const app = express();
+var server = require("./routes/server");
+var router = require("./routes/router");
 
-app.listen(3000, () => {
-    console.log('Server on port 3000');
-});
+server.inicio(router.route);
