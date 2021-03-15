@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "inciso4" : "nodemon src/index.js",
-    "inciso2" : "nodemon src/prueba/prueba.js",
+    "inciso4" : "nodemon prueba/index.js",
+    "inciso2" : "nodemon prueba/prueba/prueba.js",
+    "dev":"nodemon src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
