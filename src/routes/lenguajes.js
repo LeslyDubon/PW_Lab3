@@ -6,15 +6,22 @@ function inicio(){
     bd_lenguajes.inicio();
 }
 
-router.get('/api/v1/lenguaje',(req,res) => {
+router.get('/api/v1/lenguaje/get',(req,res) => {
     console.log('get');
-    console.log(bd_lenguajes.readOne(1));
     console.log(bd_lenguajes.readAll());
     res.end();
 }
 );
 
-router.post('/api/v1/lenguaje',(req,res) => {
+router.get('/api/v1/lenguaje/get/:id',(req,res) => {
+    console.log('get');
+    console.log(bd_lenguajes.readOne(1));
+    res.end();
+}
+);
+
+
+router.post('/api/v1/lenguaje/create',(req,res) => {
     console.log('post');
     console.log(bd_lenguajes.readAll());
     console.log(bd_lenguajes.create('English', 
@@ -26,7 +33,7 @@ router.post('/api/v1/lenguaje',(req,res) => {
 }
 );
 
-router.put('/api/v1/lenguaje',(req,res) => {
+router.put('/api/v1/lenguaje/edit/:id',(req,res) => {
     console.log('put');
     console.log(bd_lenguajes.update(3, 'Italiano', 
     68000000,
@@ -37,7 +44,7 @@ router.put('/api/v1/lenguaje',(req,res) => {
 }
 );
 
-router.delete('/api/v1/lenguaje',(req,res) => {
+router.delete('/api/v1/lenguaje/delete/:id',(req,res) => {
     console.log('delete');
     console.log(bd_lenguajes.deleteOne(3));
     res.end();
