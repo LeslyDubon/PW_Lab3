@@ -39,7 +39,7 @@ function create(nombre, hablantes, origen, familia, paises){
 function update(id, nombre, hablantes, origen, familia, paises){
     const idFound = lenguajes.findIndex(element => element.id == id);
     console.log(idFound);
-    if(idFound != null)
+    if(idFound != -1)
     {
         lenguajes[idFound] = {id: id, 
             Nombre: nombre, 
@@ -67,14 +67,14 @@ function readAll(){
 function deleteOne(id){
     const idFound = lenguajes.findIndex(element => element.id == id);
     console.log(idFound);
-    if(idFound != null)
+    if(idFound != -1)
     {
         lenguajes.splice(idFound, 1);
         return lenguajes;
     }
     else
     {
-        return false;
+        return null;
     }
 }
 
