@@ -6,13 +6,13 @@ function inicio(){
     bd_lenguajes.inicio();
 }
 
-router.get('/api/v1/lenguaje/get',(req,res) => {
+router.get('/get',(req,res) => {
     res.status(200).json(bd_lenguajes.readAll());
     res.end();
 }
 );
 
-router.get('/api/v1/lenguaje/get/:id',(req,res) => {
+router.get('/get/:id',(req,res) => {
     let lenguaje = bd_lenguajes.readOne(req.params.id);
     if(lenguaje == null){
         res.status(404);
@@ -26,7 +26,7 @@ router.get('/api/v1/lenguaje/get/:id',(req,res) => {
 );
 
 
-router.post('/api/v1/lenguaje/create',(req,res) => {
+router.post('/create',(req,res) => {
     res.status(201).json(bd_lenguajes.create(req.body.Nombre, 
         req.body.Hablantes,
         req.body.Origen,
@@ -36,7 +36,7 @@ router.post('/api/v1/lenguaje/create',(req,res) => {
 }
 );
 
-router.put('/api/v1/lenguaje/edit/:id',(req,res) => {
+router.put('/edit/:id',(req,res) => {
     let lenguaje = bd_lenguajes.update(parseInt(req.params.id), req.body.Nombre, 
     req.body.Hablantes,
     req.body.Origen,
@@ -53,7 +53,7 @@ router.put('/api/v1/lenguaje/edit/:id',(req,res) => {
 }
 );
 
-router.delete('/api/v1/lenguaje/delete/:id',(req,res) => {
+router.delete('/delete/:id',(req,res) => {
     let lenguaje = bd_lenguajes.deleteOne(req.params.id);
     if(lenguaje == null){
         res.status(404);
