@@ -23,7 +23,10 @@ client.connect(function (err){
                 getAllDocuments(db, function() {
                     getOneDocument(db, 3, function() {
                         create(db, 'Urdu (persianised Hindustani)', 68600000, 'Hindustani', ['Indo-European', 'Indo-Aryan'],  ['Fiji', 'India', 'Pakistan', 'Bangladesh'], function() {
-                            client.close();
+                            updateDocument(db, 6,  'Portuguese', 221000000, 'Old Latin', ['Indo-European', 'Romance'],  ['Portugal', 'Angola', 'Cape Verde'], function() {
+                                getAllDocuments(db, function() {client.close();
+                                });
+                            });
                         });
                     });
                 });
@@ -97,5 +100,23 @@ const insertDocuments = function(db, callback) {
     });
   };
 
+  const updateDocument = function(db, id, nombre, hablantes, origen, familia, paises, callback) {
+    const collection = db.collection('formas_comunicacion');
+    collection.find({id: id}).toArray(function(err, result) {
+        if (err) throw err;
+        console.log(result);
+        collection.updateOne({id: id}, {$set: {id: id, 
+            Nombre: nombre, 
+            Hablantes:hablantes, 
+            Origen: origen, 
+            Familia: familia, 
+            Paises: paises}}, function(err, res) {
+            if (err) throw err;
+            console.log(res);
+            callback(res);
+          });
+        
+      });
+  };
 
   exports.inicio = inicio;
