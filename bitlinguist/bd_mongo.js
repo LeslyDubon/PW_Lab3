@@ -20,7 +20,9 @@ client.connect(function (err){
             console.log("Collection created");
             insertDocuments(db, function() {
                 getAllDocuments(db, function() {
-                    client.close();
+                    getOneDocument(db, 3, function() {
+                        client.close();
+                    });
                 });
               });
           })
@@ -65,9 +67,19 @@ const insertDocuments = function(db, callback) {
     collection.find({}).toArray(function(err, result) {
         if (err) throw err;
         console.log(result);
+        callback(result);
       });
   };
 
+  const getOneDocument = function(db, id, callback) {
+    
+    const collection = db.collection('formas_comunicacion');
+    collection.find({id: id}).toArray(function(err, result) {
+        if (err) throw err;
+        console.log(result);
+        callback(result);
+      });
+  };
 
 
   exports.inicio = inicio;
