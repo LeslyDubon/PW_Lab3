@@ -2,7 +2,7 @@ let nid;
 let lenguajes;
 
 function inicio(){
-    nid = 20;
+    nid = 19;
     lenguajes = [{id: 1,  Nombre: 'Mandarin Chinese', Hablantes: 918000000, Origen: 'Old Chinese', Familia:['Sino-Tibetan', 'Sinitic'],  Paises:['Hong Kong', 'Macau', 'China', 'Singapore']}, 
     {id: 2,  Nombre: 'Spanish', Hablantes: 480000000, Origen: 'Old Latin', Familia:['Indo-European', 'Romance'],  Paises:['Mexico', 'United States', 'Colombia', 'Spain']}, 
     {id: 3,  Nombre: 'English', Hablantes: 379000000, Origen: 'Old English', Familia:['Indo-European', 'Germanic'],  Paises:['United States', 'Australia', 'New Zealand', 'United Kingdom']}, 

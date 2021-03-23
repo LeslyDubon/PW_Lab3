@@ -1,10 +1,11 @@
 const mongodb = require('mongodb').MongoClient;
 const assert = require('assert');
 
-
+let nid;
 
 function inicio(){
     //connection
+    nid = 20;
 const url = 'mongodb://localhost:27017';
 const client = new mongodb(url);
 client.connect(function (err){
@@ -21,7 +22,9 @@ client.connect(function (err){
             insertDocuments(db, function() {
                 getAllDocuments(db, function() {
                     getOneDocument(db, 3, function() {
-                        client.close();
+                        create(db, 'Urdu (persianised Hindustani)', 68600000, 'Hindustani', ['Indo-European', 'Indo-Aryan'],  ['Fiji', 'India', 'Pakistan', 'Bangladesh'], function() {
+                            client.close();
+                        });
                     });
                 });
               });
@@ -72,13 +75,26 @@ const insertDocuments = function(db, callback) {
   };
 
   const getOneDocument = function(db, id, callback) {
-    
     const collection = db.collection('formas_comunicacion');
     collection.find({id: id}).toArray(function(err, result) {
         if (err) throw err;
         console.log(result);
         callback(result);
       });
+  };
+
+  const create = function(db, nombre, hablantes, origen, familia, paises, callback) {
+    const collection = db.collection('formas_comunicacion');
+    collection.insertOne({id: nid, 
+        Nombre: nombre, 
+        Hablantes:hablantes, 
+        Origen: origen, 
+        Familia: familia, 
+        Paises: paises}, function(err, result) {
+        console.log(result);
+        nid++;
+        callback(result);
+    });
   };
 
 
