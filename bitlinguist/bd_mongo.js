@@ -7,7 +7,7 @@ var db;
 
 function inicio() {
     //connection
-    nid = 20;
+    nid = 19;
     const url = 'mongodb://localhost:27017';
     client = new mongodb(url);
     client.connect(function (err) {
@@ -74,39 +74,32 @@ const insertDocuments = function (db, callback) {
     });
 };
 
-async function readAll () {
+async function readAll() {
     const collection = db.collection('formas_comunicacion');
     return await collection.find({}).toArray();
 };
 
-const readOne = function (db, id, callback) {
-    const collection = db.collection('formas_comunicacion');
-    collection.find({ id: id }).toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-        callback(result);
-    });
+async function readOne(id_lenguaje) {
+    const collection = await db.collection('formas_comunicacion');
+    return await collection.find({ id: id_lenguaje }).toArray();
 };
 
-const create = function (db, nombre, hablantes, origen, familia, paises, callback) {
+async function create(nombre, hablantes, origen, familia, paises) {
     const collection = db.collection('formas_comunicacion');
-    collection.insertOne({
+    nid++;
+    return await collection.insertOne({
         id: nid,
         Nombre: nombre,
         Hablantes: hablantes,
         Origen: origen,
         Familia: familia,
         Paises: paises
-    }, function (err, result) {
-        console.log(result);
-        nid++;
-        callback(result);
     });
 };
 
-const update = function (db, id, nombre, hablantes, origen, familia, paises, callback) {
+async function update(id, nombre, hablantes, origen, familia, paises) {
     const collection = db.collection('formas_comunicacion');
-    collection.updateOne(
+    return await collection.updateOne(
         { id: id },
         {
             $set:
@@ -118,21 +111,14 @@ const update = function (db, id, nombre, hablantes, origen, familia, paises, cal
                 Familia: familia,
                 Paises: paises
             }
-        },
-        function (err, res) {
-            if (err) throw err;
-            callback(res);
         });
 };
 
-const deleteOne = function (db, id, callback) {
+async function deleteOne(id) {
     const collection = db.collection('formas_comunicacion');
-    collection.deleteOne(
+    return await collection.deleteOne(
         { id: id },
-        function (err, res) {
-            if (err) throw err;
-            callback(res);
-        });
+    );
 };
 
 exports.inicio = inicio;
