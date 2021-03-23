@@ -19,7 +19,9 @@ client.connect(function (err){
             if(err) console.log(err);
             console.log("Collection created");
             insertDocuments(db, function() {
-                client.close();
+                getAllDocuments(db, function() {
+                    client.close();
+                });
               });
           })
     });
@@ -27,8 +29,8 @@ client.connect(function (err){
   })
 }
 const insertDocuments = function(db, callback) {
-    // Get the documents collection
-    const collection = db.collection('documents');
+
+    const collection = db.collection('formas_comunicacion');
     // Insert some documents
     collection.insertMany([{id: 1,  Nombre: 'Mandarin Chinese', Hablantes: 918000000, Origen: 'Old Chinese', Familia:['Sino-Tibetan', 'Sinitic'],  Paises:['Hong Kong', 'Macau', 'China', 'Singapore']}, 
     {id: 2,  Nombre: 'Spanish', Hablantes: 480000000, Origen: 'Old Latin', Familia:['Indo-European', 'Romance'],  Paises:['Mexico', 'United States', 'Colombia', 'Spain']}, 
@@ -53,10 +55,19 @@ const insertDocuments = function(db, callback) {
         console.log(result);
       assert(19, result.result.n);
       assert(19, result.ops.length);
-      console.log('Inserted 20 documents into the collection');
+      console.log('Inserted 19 documents into the collection');
       callback(result);
     });
   };
+
+  const getAllDocuments = function(db, callback) {
+    const collection = db.collection('formas_comunicacion');
+    collection.find({}).toArray(function(err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+  };
+
 
 
   exports.inicio = inicio;
