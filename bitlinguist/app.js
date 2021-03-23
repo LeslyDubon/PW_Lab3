@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongo = require("../bitlinguist/bd_mongo")
 
 var indexRouter = require('./routes/index');
 var lenguajesRouter = require('./routes/lenguajes');
@@ -14,6 +15,8 @@ app.listen(app.get('port'), () => {
     console.log('Server on port ',app.get('port'))
 }
 );
+
+mongo.inicio();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
