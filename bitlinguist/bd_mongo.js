@@ -2,15 +2,16 @@ const mongodb = require('mongodb').MongoClient;
 const assert = require('assert');
 
 let nid;
+var client;
+var db;
 
 function inicio() {
     //connection
     nid = 20;
     const url = 'mongodb://localhost:27017';
-    const client = new mongodb(url);
+    client = new mongodb(url);
     client.connect(function (err) {
-
-        const db = client.db("lenguajes");
+        db = client.db("lenguajes");
         if (err) console.log(err);
         db.dropDatabase(function (err, result) {
             console.log("Error : " + err);
@@ -20,21 +21,21 @@ function inicio() {
                 if (err) console.log(err);
                 console.log("Collection created");
                 insertDocuments(db, function () {
-                    getAllDocuments(db, function () {
-                        getOneDocument(db, 3, function () {
-                            create(db, 'Urdu (persianised Hindustani)', 68600000, 'Hindustani', ['Indo-European', 'Indo-Aryan'], ['Fiji', 'India', 'Pakistan', 'Bangladesh'], function () {
-                                updateDocument(db, 6, 'Portuguese', 221000000, 'Old Latin', ['Indo-European', 'Romance'], ['Portugal', 'Angola', 'Cape Verde'], function () {
-                                    getAllDocuments(db, function () {
-                                        deleteDocument(db, 2, function () {
-                                            getAllDocuments(db, function () {
-                                                client.close();
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
+                    // readAll(db, function () {
+                    //     readOne(db, 3, function () {
+                    //         create(db, 'Urdu (persianised Hindustani)', 68600000, 'Hindustani', ['Indo-European', 'Indo-Aryan'], ['Fiji', 'India', 'Pakistan', 'Bangladesh'], function () {
+                    //             update(db, 6, 'Portuguese', 221000000, 'Old Latin', ['Indo-European', 'Romance'], ['Portugal', 'Angola', 'Cape Verde'], function () {
+                    //                 readAll(db, function () {
+                    //                     deleteOne(db, 2, function () {
+                    //                         readAll(db, function () {
+                    //                             client.close();
+                    //                         });
+                    //                     });
+                    //                 });
+                    //             });
+                    //         });
+                    //     });
+                    // });
                 });
             })
         });
@@ -65,7 +66,7 @@ const insertDocuments = function (db, callback) {
     { id: 18, Nombre: 'Tamil', Hablantes: 75000000, Origen: 'Old Tamil', Familia: ['Dravidian', 'South'], Paises: ['India', 'Sri Lanka', 'Singapore', 'Australia'] },
     { id: 19, Nombre: 'Yue Chinese', Hablantes: 73100000, Origen: 'Old Chinese', Familia: ['Sino-Tibetan', 'Sinitic'], Paises: ['Hong Kong', 'Macau', 'Angola', 'Cape Verde'] }
     ], function (err, result) {
-        console.log(result);
+        console.log(err, result);
         assert(19, result.result.n);
         assert(19, result.ops.length);
         console.log('Inserted 19 documents into the collection');
@@ -73,16 +74,12 @@ const insertDocuments = function (db, callback) {
     });
 };
 
-const getAllDocuments = function (db, callback) {
+async function readAll () {
     const collection = db.collection('formas_comunicacion');
-    collection.find({}).toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-        callback(result);
-    });
+    return await collection.find({}).toArray();
 };
 
-const getOneDocument = function (db, id, callback) {
+const readOne = function (db, id, callback) {
     const collection = db.collection('formas_comunicacion');
     collection.find({ id: id }).toArray(function (err, result) {
         if (err) throw err;
@@ -107,7 +104,7 @@ const create = function (db, nombre, hablantes, origen, familia, paises, callbac
     });
 };
 
-const updateDocument = function (db, id, nombre, hablantes, origen, familia, paises, callback) {
+const update = function (db, id, nombre, hablantes, origen, familia, paises, callback) {
     const collection = db.collection('formas_comunicacion');
     collection.updateOne(
         { id: id },
@@ -128,7 +125,7 @@ const updateDocument = function (db, id, nombre, hablantes, origen, familia, pai
         });
 };
 
-const deleteDocument = function (db, id, callback) {
+const deleteOne = function (db, id, callback) {
     const collection = db.collection('formas_comunicacion');
     collection.deleteOne(
         { id: id },
@@ -137,4 +134,10 @@ const deleteDocument = function (db, id, callback) {
             callback(res);
         });
 };
+
 exports.inicio = inicio;
+exports.readOne = readOne;
+exports.readAll = readAll;
+exports.create = create;
+exports.update = update;
+exports.deleteOne = deleteOne;

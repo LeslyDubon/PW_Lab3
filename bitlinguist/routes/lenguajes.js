@@ -1,19 +1,26 @@
 const express = require('express');
-const bd_lenguajes = require('../bd_lenguajes');
+var mongo = require("../bd_mongo")
 const router = express.Router();
 
 function inicio(){
-    bd_lenguajes.inicio();
+    mongo.inicio();
 }
 
 router.get('/get',(req,res) => {
-    res.status(200).json(bd_lenguajes.readAll());
-    res.end();
+    
+
+    mongo.readAll().then(function(lenguajes){
+        console.log(lenguajes);
+        res.status(200).json(lenguajes);
+        res.end();
+    });
+    
+    
 }
 );
 
 router.get('/get/:id',(req,res) => {
-    let lenguaje = bd_lenguajes.readOne(req.params.id);
+    let lenguaje = mongo.readOne(req.params.id);
     if(lenguaje == null){
         res.status(404);
     }
@@ -27,7 +34,7 @@ router.get('/get/:id',(req,res) => {
 
 
 router.post('/create',(req,res) => {
-    res.status(201).json(bd_lenguajes.create(req.body.Nombre, 
+    res.status(201).json(mongo.create(req.body.Nombre, 
         req.body.Hablantes,
         req.body.Origen,
         req.body.Familia,
@@ -37,7 +44,7 @@ router.post('/create',(req,res) => {
 );
 
 router.put('/edit/:id',(req,res) => {
-    let lenguaje = bd_lenguajes.update(parseInt(req.params.id), req.body.Nombre, 
+    let lenguaje = mongo.update(parseInt(req.params.id), req.body.Nombre, 
     req.body.Hablantes,
     req.body.Origen,
     req.body.Familia,
@@ -54,7 +61,7 @@ router.put('/edit/:id',(req,res) => {
 );
 
 router.delete('/delete/:id',(req,res) => {
-    let lenguaje = bd_lenguajes.deleteOne(req.params.id);
+    let lenguaje = mongo.deleteOne(req.params.id);
     if(lenguaje == null){
         res.status(404);
     }
