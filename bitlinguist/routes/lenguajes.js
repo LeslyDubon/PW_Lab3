@@ -48,7 +48,7 @@ router.put('/edit/:id', (req, res) => {
         req.body.Origen,
         req.body.Familia,
         req.body.Paises).then(function (lenguaje) {
-            if (lenguaje.length == 0) {
+            if (lenguaje.modifiedCount == 0) {
                 res.status(404);
             }
             else {

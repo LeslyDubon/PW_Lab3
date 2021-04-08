@@ -48,3 +48,47 @@ describe(' Get one language :', ()=>{
         });
     });
 });
+
+describe(' Create language :', ()=>{
+    it('should create a language', (done) => {
+        chai.request(url)
+        .post('/api/v1/lenguaje/create')
+        .send({
+            Nombre:"English",
+            Hablantes:379000000,
+            Origen:"Old English",
+            Familia:["Indo-European", "Germanic"],
+            Paises:["United States", "Australia","New Zealand"]
+        })
+        .end( (err, res) =>{
+            expect(res.statusCode).to.equals(201);
+            done(); 
+        });
+    });
+});
+
+describe(' Edit a language :', ()=>{
+    it('should edit a language', (done) => {
+        chai.request(url)
+        .put('/api/v1/lenguaje/edit/2')
+        .send({
+            Nombre:"Italiano",
+            Hablantes:68000000,
+            Origen:"Latín Vulgar",
+            Familia:["Italic", "Romance Western","Romance"],
+            Paises:["Angola", "Brazil","Mozambique"]
+        })
+        .end( (err, res) =>{
+            expect(res.statusCode).to.equals(204);
+            done(); 
+        });
+    });
+    it('should return error', (done) => {
+        chai.request(url)
+        .put('/api/v1/lenguaje/edit/9999')
+        .end( (err, res) =>{
+            expect(res.statusCode).to.equals(404);
+            done(); 
+        });
+    });
+});
