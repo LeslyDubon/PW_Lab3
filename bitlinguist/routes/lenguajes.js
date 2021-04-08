@@ -61,7 +61,6 @@ router.put('/edit/:id', (req, res) => {
 
 router.delete('/delete/:id', (req, res) => {
     mongo.deleteOne(parseInt(req.params.id)).then(function (lenguaje) {
-        console.log(lenguaje)
         if (lenguaje.deletedCount == 0) {
             res.status(404);
         }

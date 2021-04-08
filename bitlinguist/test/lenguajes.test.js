@@ -2,12 +2,13 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 const expect = require('chai').expect;
 const url = 'http://localhost:3000';
+var app = require('../app');
 chai.use(chaiHttp);
 
 
 describe(' Get languages :', ()=>{
     it('should get all the languages', (done) => {
-        chai.request(url)
+        chai.request(app)
         .get('/api/v1/lenguaje/get')
         .end( (err, res) =>{
             expect(res.statusCode).to.equals(200);
@@ -18,7 +19,7 @@ describe(' Get languages :', ()=>{
 
 describe(' Get one language :', ()=>{
     it('should get one language', (done) => {
-        chai.request(url)
+        chai.request(app)
         .get('/api/v1/lenguaje/get/3')
         .end( (err, res) =>{
             expect(res.statusCode).to.equals(200);
@@ -40,7 +41,7 @@ describe(' Get one language :', ()=>{
         });
     });
     it('should return error', (done) => {
-        chai.request(url)
+        chai.request(app)
         .get('/api/v1/lenguaje/get/9999')
         .end( (err, res) =>{
             expect(res.statusCode).to.equals(404);
@@ -51,7 +52,7 @@ describe(' Get one language :', ()=>{
 
 describe(' Create language :', ()=>{
     it('should create a language', (done) => {
-        chai.request(url)
+        chai.request(app)
         .post('/api/v1/lenguaje/create')
         .send({
             Nombre:"English",
@@ -69,7 +70,7 @@ describe(' Create language :', ()=>{
 
 describe(' Edit a language :', ()=>{
     it('should edit a language', (done) => {
-        chai.request(url)
+        chai.request(app)
         .put('/api/v1/lenguaje/edit/2')
         .send({
             Nombre:"Italiano",
@@ -95,7 +96,7 @@ describe(' Edit a language :', ()=>{
 
 describe(' Delete a language :', ()=>{
     it('should delete a language', (done) => {
-        chai.request(url)
+        chai.request(app)
         .delete('/api/v1/lenguaje/delete/6')
         .end( (err, res) =>{
             expect(res.statusCode).to.equals(204);
@@ -104,7 +105,7 @@ describe(' Delete a language :', ()=>{
         });
     });
     it('should return error', (done) => {
-        chai.request(url)
+        chai.request(app)
         .delete('/api/v1/lenguaje/delete/9999')
         .end( (err, res) =>{
             expect(res.statusCode).to.equals(404);

@@ -2,12 +2,12 @@
   "name": "PW_Proyecto_Backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "inciso4": "nodemon prueba/index.js",
     "inciso2": "nodemon prueba/prueba/prueba.js",
     "dev": "nodemon bitlinguist/app.js",
-    "test": "mocha bitlinguist/test/lenguajes.spec.js"
+    "test": "nyc --all mocha bitlinguist/test/**.test.js --exit"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "nyc": "^15.1.0"
   }
 }
