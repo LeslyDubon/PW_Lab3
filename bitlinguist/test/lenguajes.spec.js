@@ -92,3 +92,23 @@ describe(' Edit a language :', ()=>{
         });
     });
 });
+
+describe(' Delete a language :', ()=>{
+    it('should delete a language', (done) => {
+        chai.request(url)
+        .delete('/api/v1/lenguaje/delete/6')
+        .end( (err, res) =>{
+            expect(res.statusCode).to.equals(204);
+           
+            done(); 
+        });
+    });
+    it('should return error', (done) => {
+        chai.request(url)
+        .delete('/api/v1/lenguaje/delete/9999')
+        .end( (err, res) =>{
+            expect(res.statusCode).to.equals(404);
+            done(); 
+        });
+    });
+});
