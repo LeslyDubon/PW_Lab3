@@ -10,22 +10,55 @@ function inicio() {
     mongo.inicio();
 }
 
-router.get('/get', (req, res) => {
+function cachegetAll(req, res, next) {
+    client.get("getAll", (error, data) => {
+        if (error) throw error;
+
+        if (data !== null) {
+            res.status(200).json(JSON.parse(data));
+            res.end();
+        } else {
+            next()
+        }
+    }
+
+    )
+}
+
+router.get('/get', cachegetAll, (req, res) => {
     mongo.readAll().then(function (lenguajes) {
         console.log(lenguajes);
+        client.setex("getAll", 300, JSON.stringify(lenguajes));
         res.status(200).json(lenguajes);
         res.end();
     });
 }
 );
 
-router.get('/get/:id', (req, res) => {
+function cacheget(req, res, next) {
+    const id = req.params.id;
+    client.get(id, (error, data) => {
+        if (error) throw error;
 
-    mongo.readOne(parseInt(req.params.id)).then(function (lenguaje) {
+        if (data !== null) {
+            res.status(200).json(JSON.parse(data));
+            res.end();
+        } else {
+            next()
+        }
+    }
+
+    )
+}
+
+router.get('/get/:id', cacheget, (req, res) => {
+    const id = req.params.id;
+    mongo.readOne(parseInt(id)).then(function (lenguaje) {
         if (lenguaje.length == 0) {
             res.status(404);
         }
         else {
+            client.setex(id, 300, JSON.stringify(lenguaje));
             res.status(200).json(lenguaje);
         }
         res.end();
