@@ -1,7 +1,6 @@
 const mongodb = require('mongodb').MongoClient;
 const assert = require('assert');
 
-let nid;
 var client;
 var db;
 
@@ -11,40 +10,55 @@ function inicio() {
     const url = 'mongodb://localhost:27017';
     client = new mongodb(url);
     client.connect(function (err) {
-        db = client.db("lenguajes");
+        db = client.db("bitlinguist");
         if (err) console.log(err);
         db.dropDatabase(function (err, result) {
             console.log("Error : " + err);
             if (err) throw err;
             console.log("Operation Success ? " + result);
-            db.createCollection("formas_comunicacion", function (err, result) {
+            db.createCollection("counters", function (err, result) {
                 if (err) console.log(err);
                 console.log("Collection created");
-                insertDocuments(db, function () {
-                    // readAll(db, function () {
-                    //     readOne(db, 3, function () {
-                    //         create(db, 'Urdu (persianised Hindustani)', 68600000, 'Hindustani', ['Indo-European', 'Indo-Aryan'], ['Fiji', 'India', 'Pakistan', 'Bangladesh'], function () {
-                    //             update(db, 6, 'Portuguese', 221000000, 'Old Latin', ['Indo-European', 'Romance'], ['Portugal', 'Angola', 'Cape Verde'], function () {
-                    //                 readAll(db, function () {
-                    //                     deleteOne(db, 2, function () {
-                    //                         readAll(db, function () {
-                    //                             client.close();
-                    //                         });
-                    //                     });
-                    //                 });
-                    //             });
-                    //         });
-                    //     });
-                    // });
-                });
             })
-        });
+            const collection = db.collection('counters');
+            collection.insertOne({
+                _id: "lenguajeId",
+                sequence_value: 19
+            }).then(
+                collection.insertOne({
+                    _id: "userId",
+                    sequence_value: 1
+                })).then(
+                    db.createCollection("lenguajes", function (err, result) {
+                        if (err) console.log(err);
+                        console.log("Collection created");
+                        insertDocuments(db, function () {
+                        });
+                    })).then(
+                        db.createCollection("users", function (err, result) {
+                            if (err) console.log(err);
+                            console.log("Collection created");
+                            insertUsers(db, function () {
+                            });
+                        }))
+        })
 
     })
 }
+
+async function getNextSequenceValue(sequenceName) {
+    const collection = db.collection('counters');
+    return await collection.findOneAndUpdate(
+        { _id: sequenceName },
+        {
+            $inc: { sequence_value: 1 }
+
+        });
+}
+
 const insertDocuments = function (db, callback) {
 
-    const collection = db.collection('formas_comunicacion');
+    const collection = db.collection('lenguajes');
     // Insert some documents
     collection.insertMany([{ id: 1, Nombre: 'Mandarin Chinese', Hablantes: 918000000, Origen: 'Old Chinese', Familia: ['Sino-Tibetan', 'Sinitic'], Paises: ['Hong Kong', 'Macau', 'China', 'Singapore'], Imagen: 'https://static.vecteezy.com/system/resources/previews/001/925/435/original/china-flag-icon-isolate-print-illustration-vector.jpg' },
     { id: 2, Nombre: 'Spanish', Hablantes: 480000000, Origen: 'Old Latin', Familia: ['Indo-European', 'Romance'], Paises: ['Mexico', 'United States', 'Colombia', 'Spain'], Imagen: 'https://www.expatrio.com/themes/expatrio/dist/images/es-flag.png' },
@@ -74,32 +88,83 @@ const insertDocuments = function (db, callback) {
     });
 };
 
+const insertUsers = function (db, callback) {
+
+    const collection = db.collection('users');
+    // Insert some documents
+    collection.insertOne({
+        id: 1, Nombre: 'Lesly Dubón', Email: 'lkdubon@correo.url.edu.gt', Password: "901f03065142fd288ea194af43a37fe9"
+    }, function (err, result) {
+        console.log(err, result);
+        assert(1, result.result.n);
+        assert(1, result.ops.length);
+        console.log('Inserted 1 documents into the collection');
+        callback(result);
+    });
+};
+
+async function createUser(nombre, email, password) {
+    const collection = db.collection('users');
+    return await getNextSequenceValue("userId").then(async function (userId) {
+        console.log(userId.value.sequence_value)
+        return await collection.insertOne({
+            id: (userId.value.sequence_value + 1),
+            Nombre: nombre,
+            Email: email,
+            Password: password
+        });
+    });
+};
+
+async function readUser(email) {
+
+    const collection = await db.collection('users');
+    return await collection.find({ Email: email }).toArray();
+};
+
+async function updatePassword(email, password) {
+    const collection = db.collection('users');
+    return await collection.updateOne(
+        { Email: email },
+        {
+            $set:
+            {
+                Email: email,
+                Password: password
+            }
+        });
+};
+
+
 async function readAll() {
-    const collection = db.collection('formas_comunicacion');
+    const collection = db.collection('lenguajes');
     return await collection.find({}).toArray();
 };
 
 async function readOne(id_lenguaje) {
-    const collection = await db.collection('formas_comunicacion');
+    const collection = await db.collection('lenguajes');
     return await collection.find({ id: id_lenguaje }).toArray();
 };
 
 async function create(nombre, hablantes, origen, familia, paises, imagen) {
-    const collection = db.collection('formas_comunicacion');
-    nid++;
-    return await collection.insertOne({
-        id: nid,
-        Nombre: nombre,
-        Hablantes: hablantes,
-        Origen: origen,
-        Familia: familia,
-        Paises: paises,
-        Imagen: imagen
+    const collection = db.collection('lenguajes');
+    return await getNextSequenceValue("lenguajeId").then(async function (lenguajeId) {
+        console.log(lenguajeId.value.sequence_value)
+        return await collection.insertOne({
+            id: (lenguajeId.value.sequence_value + 1),
+            Nombre: nombre,
+            Hablantes: hablantes,
+            Origen: origen,
+            Familia: familia,
+            Paises: paises,
+            Imagen: imagen
+        });
     });
+
 };
 
 async function update(id, nombre, hablantes, origen, familia, paises, imagen) {
-    const collection = db.collection('formas_comunicacion');
+    const collection = db.collection('lenguajes');
     return await collection.updateOne(
         { id: id },
         {
@@ -117,7 +182,7 @@ async function update(id, nombre, hablantes, origen, familia, paises, imagen) {
 };
 
 async function deleteOne(id) {
-    const collection = db.collection('formas_comunicacion');
+    const collection = db.collection('lenguajes');
     return await collection.deleteOne(
         { id: id },
     );
@@ -129,3 +194,6 @@ exports.readAll = readAll;
 exports.create = create;
 exports.update = update;
 exports.deleteOne = deleteOne;
+exports.createUser = createUser;
+exports.readUser = readUser;
+exports.updatePassword = updatePassword;

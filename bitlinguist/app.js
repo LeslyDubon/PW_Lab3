@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 
 var lenguajesRouter = require('./routes/lenguajes');
+var usersRouter = require('./routes/users');
 
 var app = express();
 app.set('port', process.env.PORT || 3000);
@@ -26,5 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/api/v1/lenguaje', lenguajesRouter);
+app.use('/api/v1/user', usersRouter);
 
 module.exports = app;
