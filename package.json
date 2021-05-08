@@ -28,7 +28,8 @@
     "jade": "^1.11.0",
     "mocha": "^8.3.2",
     "mongodb": "^3.6.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",

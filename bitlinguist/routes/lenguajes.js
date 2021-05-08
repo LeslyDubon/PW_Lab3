@@ -1,6 +1,10 @@
 const express = require('express');
 var mongo = require("../bd_mongo")
 const router = express.Router();
+const redis = require('redis');
+
+const REDIS_PORT = process.env.PORT || 6379;
+const client = redis.createClient(REDIS_PORT);
 
 function inicio() {
     mongo.inicio();
@@ -35,7 +39,8 @@ router.post('/create', (req, res) => {
         req.body.Hablantes,
         req.body.Origen,
         req.body.Familia,
-        req.body.Paises).then(function (lenguaje) {
+        req.body.Paises,
+        req.body.Imagen).then(function (lenguaje) {
             res.status(201).json(lenguaje);
             res.end();
         });
@@ -47,7 +52,8 @@ router.put('/edit/:id', (req, res) => {
         req.body.Hablantes,
         req.body.Origen,
         req.body.Familia,
-        req.body.Paises).then(function (lenguaje) {
+        req.body.Paises,
+        req.body.Imagen).then(function (lenguaje) {
             if (lenguaje.modifiedCount == 0) {
                 res.status(404);
             }

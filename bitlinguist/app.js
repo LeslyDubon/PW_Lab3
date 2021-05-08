@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const PORT = process.env.PORT || 3000;
+
 
 var lenguajesRouter = require('./routes/lenguajes');
 
@@ -15,10 +17,6 @@ app.listen(app.get('port'), () => {
 }
 );
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
