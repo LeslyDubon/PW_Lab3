@@ -2,10 +2,9 @@ version: "3"
 services:
     backend:
         container_name: bitlinguist
+        image:  bitlinguist
         restart: on-failure
         build: .
-        volumes: 
-            - '.:/usr/src/app'
         ports:
             - "3000:3000"
         links:
