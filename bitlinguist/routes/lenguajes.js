@@ -4,7 +4,9 @@ const router = express.Router();
 const redis = require('redis');
 
 const REDIS_PORT = process.env.PORT || 6379;
-const client = redis.createClient(REDIS_PORT);
+const client = redis.createClient({
+    host:'redis',
+    port: REDIS_PORT});
 
 function inicio() {
     mongo.inicio();
@@ -26,7 +28,7 @@ function cachegetAll(req, res, next) {
 router.get('/get', cachegetAll, (req, res) => {
     mongo.readAll().then(function (lenguajes) {
         console.log(lenguajes);
-        client.setex("getAll", 300, JSON.stringify(lenguajes));
+        client.setex("getAll", 60, JSON.stringify(lenguajes));
         res.status(200).json(lenguajes);
         res.end();
     });
@@ -54,7 +56,7 @@ router.get('/get/:id', cacheget, (req, res) => {
             res.status(404);
         }
         else {
-            client.setex(id, 300, JSON.stringify(lenguaje));
+            client.setex(id, 60, JSON.stringify(lenguaje));
             res.status(200).json(lenguaje);
         }
         res.end();
