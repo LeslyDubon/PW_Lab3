@@ -12,8 +12,6 @@ function inicio() {
 
 function cachegetAll(req, res, next) {
     client.get("getAll", (error, data) => {
-        if (error) throw error;
-
         if (data !== null) {
             res.status(200).json(JSON.parse(data));
             res.end();
@@ -38,8 +36,6 @@ router.get('/get', cachegetAll, (req, res) => {
 function cacheget(req, res, next) {
     const id = req.params.id;
     client.get(id, (error, data) => {
-        if (error) throw error;
-
         if (data !== null) {
             res.status(200).json(JSON.parse(data));
             res.end();
