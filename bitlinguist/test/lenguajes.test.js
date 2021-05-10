@@ -10,8 +10,9 @@ var cliente;
 var db;
 const REDIS_PORT = process.env.PORT || 6379;
 const client = redis.createClient({
-    host:'redis',
-    port: REDIS_PORT});
+    host: "127.0.0.1",
+    port: REDIS_PORT
+});
 
 
 async function inicio() {
@@ -19,7 +20,7 @@ async function inicio() {
         console.log(succeeded);
     });
 
-    const urlMongo = 'mongodb://mongo:27017';
+    const urlMongo = 'mongodb://localhost:27017';
     cliente = new mongodb(urlMongo);
     return await cliente.connect(async function (err) {
         db = cliente.db("bitlinguist");

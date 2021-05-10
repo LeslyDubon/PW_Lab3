@@ -7,39 +7,40 @@ var db;
 function inicio() {
     //connection
     const url = 'mongodb://mongo:27017';
+    //const url = 'mongodb://localhost:27017';
     client = new mongodb(url);
     client.connect(function (err) {
         db = client.db("bitlinguist");
-            db.dropDatabase(function (err, result) {
-                console.log("Error : " + err);
-                if (err) throw err;
-                console.log("Operation Success ? " + result);
-                db.createCollection("counters", function (err, result) {
-                    if (err) console.log(err);
-                    console.log("Collection created");
-                })
-                const collection = db.collection('counters');
+        db.dropDatabase(function (err, result) {
+            console.log("Error : " + err);
+            if (err) throw err;
+            console.log("Operation Success ? " + result);
+            db.createCollection("counters", function (err, result) {
+                if (err) console.log(err);
+                console.log("Collection created");
+            })
+            const collection = db.collection('counters');
+            collection.insertOne({
+                _id: "lenguajeId",
+                sequence_value: 19
+            }).then(
                 collection.insertOne({
-                    _id: "lenguajeId",
-                    sequence_value: 19
-                }).then(
-                    collection.insertOne({
-                        _id: "userId",
-                        sequence_value: 1
+                    _id: "userId",
+                    sequence_value: 1
+                })).then(
+                    db.createCollection("lenguajes", function (err, result) {
+                        if (err) console.log(err);
+                        console.log("Collection created");
+                        insertDocuments(db, function () {
+                        });
                     })).then(
-                        db.createCollection("lenguajes", function (err, result) {
+                        db.createCollection("users", function (err, result) {
                             if (err) console.log(err);
                             console.log("Collection created");
-                            insertDocuments(db, function () {
+                            insertUsers(db, function () {
                             });
-                        })).then(
-                            db.createCollection("users", function (err, result) {
-                                if (err) console.log(err);
-                                console.log("Collection created");
-                                insertUsers(db, function () {
-                                });
-                            }))
-            })
+                        }))
+        })
 
     })
 }

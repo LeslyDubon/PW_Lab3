@@ -2,7 +2,7 @@ version: "3"
 services:
     backend:
         container_name: bitlinguist
-        image:  bitlinguist
+        image:  "lkdubon/bitlinguist:latest"
         restart: on-failure
         build: .
         ports:

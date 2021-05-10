@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 describe(' Login :', () => {
     it('should be a successful login', (done) => {
         chai.request(app)
-            .get('/api/v1/user/login')
+            .post('/api/v1/user/login')
             .send({
                 Email: "lkdubon@correo.url.edu.gt",
                 Password: "3r1z0s311"
@@ -20,7 +20,7 @@ describe(' Login :', () => {
     });
     it('should return not found', (done) => {
         chai.request(url)
-            .get('/api/v1/user/login')
+            .post('/api/v1/user/login')
             .send({
                 Email: "lkdubon@url.edu.gt",
                 Password: "3r1z0s311"
@@ -32,7 +32,7 @@ describe(' Login :', () => {
     });
     it('should return unauthorized access', (done) => {
         chai.request(url)
-            .get('/api/v1/user/login')
+            .post('/api/v1/user/login')
             .send({
                 Email: "lkdubon@correo.url.edu.gt",
                 Password: "3r1z0s31"

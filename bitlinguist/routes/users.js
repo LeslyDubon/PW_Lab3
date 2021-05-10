@@ -3,7 +3,7 @@ var mongo = require("../bd_mongo");
 var crypto = require('crypto');
 const router = express.Router();
 
-router.get('/login', (req, res) => {
+router.post('/login', (req, res) => {
     const email = req.body.Email;
     const password = crypto.createHash('md5').update(req.body.Password).digest("hex");
     mongo.readUser(email).then(function (user) {

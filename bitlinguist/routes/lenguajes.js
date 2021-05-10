@@ -5,8 +5,10 @@ const redis = require('redis');
 
 const REDIS_PORT = process.env.PORT || 6379;
 const client = redis.createClient({
-    host:'redis',
-    port: REDIS_PORT});
+    host: 'redis',
+    //host: "127.0.0.1",
+    port: REDIS_PORT
+});
 
 function inicio() {
     mongo.inicio();
@@ -28,7 +30,7 @@ function cachegetAll(req, res, next) {
 router.get('/get', cachegetAll, (req, res) => {
     mongo.readAll().then(function (lenguajes) {
         console.log(lenguajes);
-        client.setex("getAll", 60, JSON.stringify(lenguajes));
+        client.setex("getAll", 30, JSON.stringify(lenguajes));
         res.status(200).json(lenguajes);
         res.end();
     });
