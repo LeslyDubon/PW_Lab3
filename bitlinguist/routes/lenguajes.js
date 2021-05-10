@@ -30,7 +30,7 @@ function cachegetAll(req, res, next) {
 router.get('/get', cachegetAll, (req, res) => {
     mongo.readAll().then(function (lenguajes) {
         console.log(lenguajes);
-        client.setex("getAll", 30, JSON.stringify(lenguajes));
+        client.setex("getAll", 15, JSON.stringify(lenguajes));
         res.status(200).json(lenguajes);
         res.end();
     });
